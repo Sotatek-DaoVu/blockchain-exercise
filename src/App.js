@@ -9,6 +9,7 @@ function App() {
   const [chainId, setChainId] = useState(null);
   const [provider, setProvider] = useState(window.ethereum);
   const [balance, setBalance] = useState(0);
+  const [addressInput, setAddressInput] = useState("");
   const [inputAmount, setInputAmount] = useState("");
 
   const onLogin = async (provider) => {
@@ -60,8 +61,13 @@ function App() {
     setCurrentAccount(null);
   };
 
-  const handleTranfer = () => {
+  const handleTranfer = async () => {
     const web3 = new Web3(provider);
+    await web3.eth.sendTransaction({
+      from: currentAccount,
+      to: addressInput,
+      value: await web3.utils.toWei(inputAmount, "ether"),
+    });
   };
 
   return (
@@ -86,6 +92,7 @@ function App() {
             handleTranfer={handleTranfer}
             inputAmount={inputAmount}
             setInputAmount={setInputAmount}
+            setAddressInput={setAddressInput}
           />
         )}
       </main>
